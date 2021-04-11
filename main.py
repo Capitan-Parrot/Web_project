@@ -1,14 +1,14 @@
 from flask import Flask, render_template, redirect, make_response, jsonify
 from data import db_session
 from data.users import User
-from data.dishes import dish
+from data.dishes import Dish
 from forms.register import RegisterForm
 from forms.login import LoginForm
-from forms.add_job import JobsForm
+from forms.add_dish import DishesForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import reqparse, abort, Api, Resource
 import users_resource
-import jobs_resource
+import dishes_resource
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'incredible_secret_key'
@@ -81,10 +81,10 @@ def reqister():
 @app.route('/addjob',  methods=['GET', 'POST'])
 @login_required
 def add_jobs():
-    form = JobsForm()
+    form = DishesForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        dish = dishes()
+        dish = Dish()
         dish.dish = form.dish.data
         dish.team_leader = form.team_leader.data
         dish.work_size = form.work_size.data
@@ -100,7 +100,7 @@ def add_jobs():
 
 @app.route('/')
 def main():
-    dishes = [elem for elem in db_sess.query(Dishes).all()]
+    dishes = [elem for elem in db_sess.query(Dish).all()]
     return render_template('table.html', orders__list=dishes)
 
 
@@ -109,6 +109,6 @@ if __name__ == '__main__':
     db_sess = db_session.create_session()
     api.add_resource(users_resource.UsersListResource, '/api/v2/users')
     api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>')
-    api.add_resource(jobs_resource.DishesListResource, '/api/v2/dishes')
-    api.add_resource(jobs_resource.DishesResource, '/api/v2/dishes/<int:dishes_id>')
+    api.add_resource(dishes_resource.DishesListResource, '/api/v2/dishes')
+    api.add_resource(dishes_resource.DishesResource, '/api/v2/dishes/<int:dishes_id>')
     app.run(debug=True)
