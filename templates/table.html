@@ -8,14 +8,14 @@
         <a href="add_job" class="btn btn-secondary">Add job</a>
         <br>
     {% endif %}
-    {% for job in jobs_list %}
+    {% for dish in orders_list %}
         <br>
         <table class="table">
             <tr><th>Action №{{job.id}}</th></tr>
             <tr><td>Title of activity</td> <td>Team leader</td> <td>Duration</td>
                 <td>List of collaborators</td> <td>Hazard category</td> <td>is finished</td></tr>
-            <tr><td>{{job.job}} </td> <td>{{job.user.surname + ' ' + job.user.name}}</td> <td>{{job.work_size}} hours</td>
-                <td>{{job.collaborators}}</td> <td>{{job.category}}</td>
+            <tr><td>{{dish.job}} </td> <td>{{dish.user.surname + ' ' + dish.user.name}}</td> <td>{{dish.work_size}} hours</td>
+                <td>{{dish.collaborators}}</td> <td>{{dish.category}}</td>
                 <td>{% if job.is_finished %}
                         <div>Done</div>
                     {% else %}

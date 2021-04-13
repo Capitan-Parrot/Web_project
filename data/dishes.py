@@ -15,6 +15,6 @@ class Dish(SqlAlchemyBase, SerializerMixin):
     work_size = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     category = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("category.id"))
     categories = orm.relation("Category",
-                              secondary="job_to_category",
-                              backref="jobs")
+                              secondary="dish_to_category",
+                              backref="dishes")
     user = orm.relation('User')

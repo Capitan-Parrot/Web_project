@@ -2,10 +2,10 @@ import sqlalchemy
 from .db_session import SqlAlchemyBase
 
 association_table = sqlalchemy.Table(
-    'job_to_category',
+    'dish_to_category',
     SqlAlchemyBase.metadata,
-    sqlalchemy.Column('jobs', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('jobs.id')),
+    sqlalchemy.Column('dishes', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('dishes.id')),
     sqlalchemy.Column('category', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('category.id'))
 )

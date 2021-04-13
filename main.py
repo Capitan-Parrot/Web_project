@@ -54,16 +54,20 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
+    print(form.errors)
     if form.validate_on_submit():
+        print(form, 1322)
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают")
+        print(1)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
+        print(2)
         user = User(
             surname=form.surname.data,
             name=form.name.data,
@@ -101,11 +105,11 @@ def add_jobs():
 @app.route('/')
 def main():
     dishes = [elem for elem in db_sess.query(Dish).all()]
-    return render_template('table.html', orders__list=dishes)
+    return render_template('table.html', orders_list=dishes)
 
 
 if __name__ == '__main__':
-    db_session.global_init("db/mars_explorer.db")
+    db_session.global_init("db/cook_or_buy.db")
     db_sess = db_session.create_session()
     api.add_resource(users_resource.UsersListResource, '/api/v2/users')
     api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>')
