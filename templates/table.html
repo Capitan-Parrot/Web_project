@@ -15,7 +15,8 @@
                 <td>Список ингредиентов</td> <td>Категория блюда</td></tr>
             <tr><td>{{dish.title}} </td> <td>{{dish.user.surname + ' ' + dish.user.name}}</td> <td>{{dish.work_size}} часов</td>
                 <td>{{dish.ingredients}}</td> <td>{{dish.categories.name}}</td>
-            {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}
+        <table>
+                    {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}
             <div>
                 <a href="/add_job/{{ dish.id }}" class="btn btn-warning">
                     Изменить
@@ -25,6 +26,5 @@
                 </a>
             </div>
             {% endif %}
-        <table>
     {% endfor %}
 {% endblock %}

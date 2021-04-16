@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Adding a job</h1>
+<h1>Публикация нового блюда</h1>
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>
@@ -14,9 +14,9 @@
         {% endfor %}
     </p>
     <p>
-        {{ form.chef_id.label }}<br>
-        {{ form.chef_id(class="form-control") }}<br>
-        {% for error in form.chef_id.errors %}
+        {{ form.cooker.label }}<br>
+        {{ form.cooker(class="form-control") }}<br>
+        {% for error in form.cooker.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
@@ -40,15 +40,15 @@
             </p>
         {% endfor %}
     </p>
-<!--        <p>-->
-<!--        {{ form.category.label }}<br>-->
-<!--        {{ form.category(class="form-control") }}<br>-->
-<!--        {% for error in form.category.errors %}-->
-<!--            <p class="alert alert-danger" role="alert">-->
-<!--                {{ error }}-->
-<!--            </p>-->
-<!--        {% endfor %}-->
-<!--    </p>-->
+        <p>
+        {{ form.category.label }}<br>
+        {{ form.category(class="form-control") }}<br>
+        {% for error in form.category.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
 </form>

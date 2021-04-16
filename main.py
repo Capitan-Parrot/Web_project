@@ -54,20 +54,16 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
-    print(form.errors)
     if form.validate_on_submit():
-        print(form, 1322)
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают")
-        print(1)
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-        print(2)
         user = User(
             surname=form.surname.data,
             name=form.name.data,
@@ -82,18 +78,21 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
-@app.route('/addjob',  methods=['GET', 'POST'])
+@app.route('/add_job',  methods=['GET', 'POST'])
 @login_required
 def add_jobs():
     form = DishesForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         dish = Dish()
-        dish.dish = form.dish.data
-        dish.team_leader = form.team_leader.data
+        if not db_sess.query(User).filter(User.id == form.cooker.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Шеф-повара с таким ID не существует")
+        dish.title = form.title.data
+        dish.cooker = form.cooker.data
         dish.work_size = form.work_size.data
-        dish.collaborators = form.collaborators.data
-        dish.is_finished = form.is_finished.data
+        dish.ingredients = form.ingredients.data
         dish.category = form.category.data
         db_sess.add(dish)
         db_sess.commit()
