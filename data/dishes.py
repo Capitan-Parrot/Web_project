@@ -13,8 +13,7 @@ class Dish(SqlAlchemyBase, SerializerMixin):
     cooker = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     work_size = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    ingredients = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     category = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("category.id"))
-    categories = orm.relation("Category",
-                              secondary="dish_to_category",
-                              backref="dishes")
+    categories = orm.relation('Category')
     user = orm.relation('User')
