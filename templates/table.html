@@ -4,7 +4,7 @@
 
     <h1>Блюда, доступные сейчас</h1>
     {% if current_user.is_authenticated %}
-        <a href="add_job" class="btn btn-secondary">Добавить блюдо</a>
+        <a href="add_dish" class="btn btn-secondary">Добавить блюдо</a>
         <br>
     {% endif %}
     {% for dish in orders_list %}
@@ -18,10 +18,10 @@
         <table>
                     {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}
             <div>
-                <a href="/add_job/{{ dish.id }}" class="btn btn-warning">
+                <a href="/add_dish/{{dish.id}}" class="btn btn-warning">
                     Изменить
                 </a>
-                <a href="/job_delete/{{ dish.id }}" class="btn btn-danger">
+                <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">
                     Удалить
                 </a>
             </div>

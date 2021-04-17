@@ -3,6 +3,12 @@
 {% block content %}
 <h1>Публикация нового блюда</h1>
 <form action="" method="post">
+    {% if message %}
+        <p class="alert alert-danger" role="alert">
+                    {{ message }}
+        </p>
+    {% endif %}
+
     {{ form.hidden_tag() }}
     <p>
         {{ form.title.label }}<br>
@@ -50,6 +56,6 @@
         {% endfor %}
     </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-    {{message}}
+
 </form>
 {% endblock %}

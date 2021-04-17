@@ -1,7 +1,8 @@
-from flask import Flask, render_template, redirect, make_response, jsonify
+from flask import Flask, render_template, redirect, make_response, jsonify, request
 from data import db_session
 from data.users import User
 from data.dishes import Dish
+from data.category import Category
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_dish import DishesForm
@@ -78,27 +79,77 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
-@app.route('/add_job',  methods=['GET', 'POST'])
+@app.route('/add_dish',  methods=['GET', 'POST'])
 @login_required
-def add_jobs():
+def add_dish():
     form = DishesForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         dish = Dish()
         if not db_sess.query(User).filter(User.id == form.cooker.data).first():
-            return render_template('register.html', title='Регистрация',
+            return render_template('dishes.html', title='Добавление новости',
                                    form=form,
                                    message="Шеф-повара с таким ID не существует")
+        if not db_sess.query(Category).filter(Category.id == form.category.data).first():
+            return render_template('dishes.html', title='Добавление новости',
+                                   form=form,
+                                   message="Категории с таким ID не существует")
         dish.title = form.title.data
         dish.cooker = form.cooker.data
         dish.work_size = form.work_size.data
-        dish.ingredients = form.ingredients.data
+        dish.collaborators = form.collaborators.data
+        dish.is_finished = form.is_finished.data
         dish.category = form.category.data
         db_sess.add(dish)
         db_sess.commit()
         return redirect('/')
     return render_template('dishes.html', title='Добавление новости',
                            form=form)
+
+
+@app.route('/add_dish/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_dishes(id):
+    form = DishesForm()
+    if request.method == "GET":
+        db_sess = db_session.create_session()
+        dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
+        if dish:
+            form.title.data = dish.title
+            form.cooker.data = dish.cooker
+            form.work_size.data = dish.work_size
+            form.ingredients.data = dish.ingredients
+            form.category.data = dish.category
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
+        if dish:
+            dish.title = form.title.data
+            dish.cooker = form.cooker.data
+            dish.work_size = form.work_size.data
+            dish.ingredients = form.ingredients.data
+            dish.category = form.category.data
+            db_sess.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('dishes.html',
+                           title='Добавление работы',
+                           form=form)
+
+@app.route('/dish_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def dish_delete(id):
+    db_sess = db_session.create_session()
+    dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
+    if dish:
+        db_sess.delete(dish)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
 
 
 @app.route('/')
