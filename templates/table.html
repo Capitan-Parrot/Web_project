@@ -4,27 +4,44 @@
 
     <h1>Блюда, доступные сейчас</h1>
     {% if current_user.is_authenticated %}
-        <a href="add_dish" class="btn btn-secondary">Добавить блюдо</a>
+        <a href="add_dish" class="btn btn-primary">Добавить блюдо</a>
         <br>
     {% endif %}
     {% for dish in orders_list %}
         <br>
-        <table class="table">
-            <tr><th>Блюдо №{{dish.id}}</th></tr>
-            <tr><td>Название блюда</td> <td>Повар</td> <td>Длительность приготовления</td>
-                <td>Список ингредиентов</td> <td>Категория блюда</td></tr>
-            <tr><td>{{dish.title}} </td> <td>{{dish.user.surname + ' ' + dish.user.name}}</td> <td>{{dish.work_size}} часов</td>
-                <td>{{dish.ingredients}}</td> <td>{{dish.categories.name}}</td>
-        <table>
-                    {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}
-            <div>
-                <a href="/add_dish/{{dish.id}}" class="btn btn-warning">
-                    Изменить
-                </a>
-                <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">
-                    Удалить
-                </a>
+        <div class="card" style="width: 50%">
+            <img src="static/img/photo2.jpg" class="card-img-top" alt="Nope">
+            <div class="card-body">
+                <p class="card-text">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><h4>Шеф-повар:</h4> {{dish.user.surname + ' ' + dish.user.name}}</li>
+                        <li class="list-group-item"><h4>Длительность приготовления:</h4> {{dish.work_size}} часов</li>
+                        <li class="list-group-item"><h4>Список ингредиентов:</h4> {{dish.ingredients}}</li>
+                        <li class="list-group-item"><h4>Категория блюда:</h4> {{dish.categories.name}}</li>
+                        {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}
+                            <li class="list-group-item">
+                                <a href="/add_dish/{{dish.id}}" class="btn btn-warning">
+                                    Изменить
+                                </a>
+                                <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">
+                                    Удалить
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </p>
             </div>
-            {% endif %}
+        </div>
+
+<!--        {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}-->
+<!--            <div>-->
+<!--                <a href="/add_dish/{{dish.id}}" class="btn btn-warning">-->
+<!--                    Изменить-->
+<!--                </a>-->
+<!--                <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">-->
+<!--                    Удалить-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        {% endif %}-->
     {% endfor %}
 {% endblock %}

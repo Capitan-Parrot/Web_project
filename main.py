@@ -64,7 +64,7 @@ def reqister():
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Такой пользователь уже есть")
+                                   message="Пользователь с такой почтой уже есть")
         user = User(
             surname=form.surname.data,
             name=form.name.data,
@@ -97,8 +97,6 @@ def add_dish():
         dish.title = form.title.data
         dish.cooker = form.cooker.data
         dish.work_size = form.work_size.data
-        dish.collaborators = form.collaborators.data
-        dish.is_finished = form.is_finished.data
         dish.category = form.category.data
         db_sess.add(dish)
         db_sess.commit()
@@ -138,6 +136,7 @@ def edit_dishes(id):
     return render_template('dishes.html',
                            title='Добавление работы',
                            form=form)
+
 
 @app.route('/dish_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
