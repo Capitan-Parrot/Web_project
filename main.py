@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, make_response, jsonify, request
+from flask import Flask, render_template, redirect, make_response, jsonify, request, url_for
 from data import db_session
 from data.users import User
 from data.dishes import Dish
@@ -8,6 +8,7 @@ from forms.login import LoginForm
 from forms.add_dish import DishesForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import reqparse, abort, Api, Resource
+import os.path
 import users_resource
 import dishes_resource
 
@@ -149,6 +150,17 @@ def dish_delete(id):
     else:
         abort(404)
     return redirect('/')
+
+
+@app.route('/file_upload/<int:id>', methods=['POST', 'GET'])
+def sample_file_upload(id):
+    if request.method == 'GET':
+        return render_template('file_upload.html', id=id)
+    elif request.method == 'POST':
+        f = request.files[str(id)]
+        with open(f'static/img/{id}.jpg', 'wb') as s:
+            s.write(f.read())
+        return redirect('/')
 
 
 @app.route('/')
