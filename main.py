@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, make_response, jsonify, request, url_for
+import os
 from data import db_session
 from data.users import User
 from data.dishes import Dish
@@ -148,6 +149,8 @@ def dish_delete(id):
     db_sess = db_session.create_session()
     dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
     if dish:
+        if os.path.exists(f'static/img/{id}.jpg'):
+            os.remove(f'static/img/{id}.jpg')
         db_sess.delete(dish)
         db_sess.commit()
     else:
@@ -174,6 +177,15 @@ def like_it(id):
     user.liked_dish = ', '.join([str(elem) for elem in liked_dishes])
     db_sess.commit()
     return redirect('/')
+
+
+@app.route('/profile/<int:id>', methods=['GET', 'POST'])
+@login_required
+def profile(id):
+    liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
+    print(liked_dishes)
+    return render_template('profile.html', user=current_user,
+                           dishes=' '.join([elem.title for elem in db_sess.query(Dish).filter(Dish.id.in_(liked_dishes)).all()]))
 
 
 @app.route('/file_upload/<int:id>', methods=['POST', 'GET'])
