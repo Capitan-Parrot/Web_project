@@ -184,7 +184,7 @@ def sample_file_upload(id):
         f = request.files[str(id)]
         with open(f'static/img/{id}.jpg', 'wb') as s:
             s.write(f.read())
-        return "Форма отправлена"
+        return f'<a href="/" align="center">Форма отправлена. Вернуться на главную</a>'
 
 
 @app.route('/')

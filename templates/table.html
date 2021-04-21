@@ -12,12 +12,10 @@
     {% for dish in orders_list %}
         <br>
         <div class="card" style="width: 50%">
-            <img src=static/img/{{loop.index}}.jpg class="card-img-top" alt="Nope">
+            <img src="static/img/{{dish.id}}.jpg" class="card-img-top" alt="Nope">
             <div class="card-body">
                     <h3 class="card-title">{{dish.title}}</h3>
-
             </div>
-
                 <p class="card-text">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><h4>Шеф-повар:</h4> {{dish.user.surname + ' ' + dish.user.name}}</li>
@@ -32,7 +30,7 @@
                                 <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">
                                     Удалить
                                 </a>
-                                <a href="/file_upload/{{loop.index}}" class="btn btn-success">
+                                <a href="/file_upload/{{dish.id}}" class="btn btn-success">
                                     Добавить фото
                                 </a>
                             </li>
