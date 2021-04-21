@@ -15,5 +15,6 @@ class Dish(SqlAlchemyBase, SerializerMixin):
     work_size = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     ingredients = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     category = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("category.id"))
+    likes = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     categories = orm.relation('Category')
     user = orm.relation('User')
