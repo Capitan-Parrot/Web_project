@@ -12,7 +12,7 @@
     {% for dish in orders_list %}
         <br>
         <div class="card" style="width: 50%">
-            <img src="static/img/photo2.jpg" class="card-img-top" alt="Nope">
+            <img src=static/img/{{loop.index}}.jpg class="card-img-top" alt="Nope">
             <div class="card-body">
                     <h3 class="card-title">{{dish.title}}</h3>
 
@@ -32,7 +32,9 @@
                                 <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">
                                     Удалить
                                 </a>
-
+                                <a href="/file_upload/{{loop.index}}" class="btn btn-success">
+                                    Добавить фото
+                                </a>
                             </li>
                         {% endif %}
                         <li class="list-group-item">
