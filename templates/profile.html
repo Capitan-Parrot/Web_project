@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="margin-right:20px;">
+        <img src= {{ photo }} class="card-image-top" width="350" height="300" align="left">
+    </div>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><h4>Имя:</h4> {{user.surname + ' ' + user.name}}</li>
+        <li class="list-group-item"><h4>Возраст:</h4> {{user.age}}</li>
+        <li class="list-group-item"><h4>Должность:</h4> {{user.position}}</li>
+        <li class="list-group-item"><h4>Почта для связи:</h4> {{user.email}}</li>
+        <li class="list-group-item"><h4>Понравившиеся блюда:</h4> {{dishes}}</li>
+
+        <a href="/file_upload/user/{{user.id}}" class="btn btn-success">
+            Добавить новое фото
+        </a>
+        <a href="/logout" class="btn btn-danger"> Выйти из уч. записи </a>
+    </ul>
+{% endblock %}
