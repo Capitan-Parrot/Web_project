@@ -17,7 +17,7 @@ def get_dishes():
     return flask.jsonify(
         {
             'dishes':
-                [item.to_dict(only=('id', 'cooker', 'title', 'category', 'work_size'))
+                [item.to_dict(only=('id', 'cooker', 'title', 'category', 'work_size', 'likes'))
                  for item in dishes]
         }
     )
@@ -31,7 +31,7 @@ def get_one_dish(dish_id):
         return flask.jsonify({'error': 'Not found'})
     return flask.jsonify(
         {
-            'dishes': dish.to_dict(only=('id', 'cooker', 'title', 'category', 'work_size'))
+            'dishes': dish.to_dict(only=('id', 'cooker', 'title', 'category', 'work_size', 'likes'))
         }
     )
 
@@ -58,7 +58,7 @@ def create_dish():
 
 
 @blueprint.route('/api/dishes/<int:dish_id>', methods=['DELETE'])
-def delete_job(dish_id):
+def delete_dish(dish_id):
     db_sess = db_session.create_session()
     dish = db_sess.query(Dish).get(dish_id)
     if not dish:

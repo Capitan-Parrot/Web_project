@@ -23,6 +23,7 @@
     <a class="navbar-brand" href="#"><h2>Готовь или покупай</h2></a>
     {% if current_user.is_authenticated %}
         <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+        <a class="btn btn-success" href="/profile">Личный кабинет</a>
     {% else %}
         <p>
             <a class="btn btn-primary " href="/register">Зарегистрироваться</a>

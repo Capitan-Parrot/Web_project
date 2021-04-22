@@ -19,17 +19,6 @@
                         <li class="list-group-item"><h4>Список ингредиентов:</h4> {{dish.ingredients}}</li>
                         <li class="list-group-item"><h4>Категория блюда:</h4> {{dish.categories.name}}</li>
                         {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}
-                            <li class="list-group-item">
-                                <a href="/add_dish/{{dish.id}}" class="btn btn-warning">
-                                    Изменить
-                                </a>
-                                <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">
-                                    Удалить
-                                </a>
-                                <a href="/file_upload/{{loop.index}}" class="btn btn-success">
-                                    Добавить фото
-                                </a>
-                            </li>
                         <li class="list-group-item">
                             {% if current_user.is_authenticated and (dish.id in liked_dishes) %}
                                 <a href="/like_it/{{dish.id}}" class="btn btn-outline-danger float-right">

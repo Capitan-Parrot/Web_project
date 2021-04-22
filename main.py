@@ -124,6 +124,10 @@ def edit_dishes(id):
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
+        if not db_sess.query(Category).filter(Category.id == form.category.data).first():
+            return render_template('dishes.html', title='Добавление новости',
+                                   form=form,
+                                   message="Категории с таким ID не существует")
         if dish:
             dish.title = form.title.data
             dish.cooker = form.cooker.data
@@ -152,6 +156,27 @@ def dish_delete(id):
     return redirect('/')
 
 
+@app.route('/like_it/<int:id>', methods=['GET', 'POST'])
+@login_required
+def like_it(id):
+    db_sess = db_session.create_session()
+    dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
+    user = db_sess.query(User).filter(User.id == current_user.id).first()
+    if current_user.is_authenticated:
+        liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
+    else:
+        liked_dishes = []
+    if dish.id in liked_dishes:
+        dish.likes -= 1
+        del liked_dishes[liked_dishes.index(dish.id)]
+    else:
+        dish.likes += 1
+        liked_dishes.append(str(dish.id))
+    user.liked_dish = ', '.join([str(elem) for elem in liked_dishes])
+    db_sess.commit()
+    return redirect('/')
+
+
 @app.route('/file_upload/<int:id>', methods=['POST', 'GET'])
 def sample_file_upload(id):
     if request.method == 'GET':
@@ -161,6 +186,17 @@ def sample_file_upload(id):
         with open(f'static/img/{id}.jpg', 'wb') as s:
             s.write(f.read())
         return redirect('/')
+
+
+@app.route('/profile')
+def profile():
+    if current_user.is_authenticated:
+        liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
+    # dishes = [elem for elem in dish = db_sess.query(Dish).filter(Dish.id == liked_dishes[]).first()]
+    dishes = []
+    for number in liked_dishes:
+        dishes.append(db_sess.query(Dish).filter(Dish.id == int(number)).first())
+    return render_template('profile_table.html', orders_list=dishes)
 
 
 @app.route('/')

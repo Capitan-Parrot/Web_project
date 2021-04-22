@@ -1,3 +1,4 @@
+
 from flask_restful import reqparse
 
 
@@ -8,4 +9,5 @@ parser.add_argument('age', required=True, type=int)
 parser.add_argument('position', required=True)
 parser.add_argument('speciality', required=True)
 parser.add_argument('address', required=True)
+parser.add_argument('liked_dish', required=True)
 parser.add_argument('email', required=True)
