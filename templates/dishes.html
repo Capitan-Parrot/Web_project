@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Публикация нового блюда</h1>
+<h1>{{title}}</h1>
 <form action="" method="post" enctype="multipart/form-data">
     {% if message %}
         <p class="alert alert-danger" role="alert">
@@ -50,6 +50,15 @@
         {{ form.category.label }}<br>
         {{ form.category(class="form-control") }}<br>
         {% for error in form.category.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.recipe.label }}<br>
+        {{ form.recipe(class="form-control") }}<br>
+        {% for error in form.recipe.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>

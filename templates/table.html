@@ -5,7 +5,7 @@
     <h1 align="center">Блюда, доступные сейчас</h1>
     {% if current_user.is_authenticated %}
         <div class="add" align="center">
-            <a href="add_dish" class="btn btn-primary" align="center">Добавить блюдо</a>
+            <a href="add_dish" class="btn btn-primary" >Добавить блюдо</a>
             <br>
         </div>
     {% endif %}
@@ -14,45 +14,43 @@
         <div class="card" style="width: 50%">
             <img src="static/img/{{dish.id}}.jpg" class="card-img-top" alt="Nope">
             <div class="card-body">
-                    <h3 class="card-title">{{dish.title}}</h3>
+                <h3 class="card-title">{{dish.title}}</h3>
             </div>
-                <p class="card-text">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><h4>Шеф-повар:</h4> {{dish.user.surname + ' ' + dish.user.name}}</li>
-                        <li class="list-group-item"><h4>Длительность приготовления:</h4> {{dish.work_size}} часов</li>
-                        <li class="list-group-item"><h4>Список ингредиентов:</h4> {{dish.ingredients}}</li>
-                        <li class="list-group-item"><h4>Категория блюда:</h4> {{dish.categories.name}}</li>
-                        {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}
-                            <li class="list-group-item">
-                                <a href="/add_dish/{{dish.id}}" class="btn btn-warning">
-                                    Изменить
-                                </a>
-                                <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">
-                                    Удалить
-                                </a>
-                                <a href="/file_upload/{{dish.id}}" class="btn btn-success">
-                                    Добавить фото
-                                </a>
-                            </li>
-                        {% endif %}
-                        <li class="list-group-item">
-                            {% if current_user.is_authenticated and (dish.id in liked_dishes) %}
-                                <a href="/like_it/{{dish.id}}" class="btn btn-outline-danger float-right">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                                    </svg> {{dish.likes}} лайков
-                                </a>
-                            {% else %}
-                                <a href="/like_it/{{dish.id}}" class="btn btn-outline-danger float-right">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                    <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                                </svg> {{dish.likes}} лайков
-                                </a>
-                            {% endif %}
-                        </li>
-                    </ul>
-                </p>
-            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><h4>Шеф-повар:</h4> {{dish.user.surname + ' ' + dish.user.name}}</li>
+                <li class="list-group-item"><h4>Длительность приготовления:</h4> {{dish.work_size}} </li>
+                <li class="list-group-item"><h4>Список ингредиентов:</h4> {{dish.ingredients}}</li>
+                <li class="list-group-item"><h4>Категория блюда:</h4> {{dish.categories.name}}</li>
+                <li class="list-group-item"><h4>Рецепт:</h4> {{dish.recipe}}</li>
+                {% if current_user.is_authenticated and ((current_user == dish.user) or (current_user.id == 1)) %}
+                <li class="list-group-item">
+                    <a href="/add_dish/{{dish.id}}" class="btn btn-warning">
+                        Изменить
+                    </a>
+                    <a href="/dish_delete/{{dish.id}}" class="btn btn-danger">
+                        Удалить
+                    </a>
+                    <a href="/file_upload/dish/{{dish.id}}" class="btn btn-success">
+                        Добавить фото
+                    </a>
+                </li>
+                {% endif %}
+                <li class="list-group-item">
+                    {% if current_user.is_authenticated and (dish.id in liked_dishes) %}
+                    <a href="/like_it/{{dish.id}}" class="btn btn-outline-danger float-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                        </svg> Кол-во лайков: {{dish.likes}}
+                    </a>
+                    {% else %}
+                    <a href="/like_it/{{dish.id}}" class="btn btn-outline-danger float-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                            <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                        </svg> Кол-во лайков: {{dish.likes}}
+                    </a>
+                    {% endif %}
+                </li>
+            </ul>
         </div>
     {% endfor %}
 {% endblock %}

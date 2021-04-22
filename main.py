@@ -88,21 +88,22 @@ def add_dish():
         db_sess = db_session.create_session()
         dish = Dish()
         if not db_sess.query(User).filter(User.id == form.cooker.data).first():
-            return render_template('dishes.html', title='Добавление новости',
+            return render_template('dishes.html', title='Добавление блюда',
                                    form=form,
                                    message="Шеф-повара с таким ID не существует")
         if not db_sess.query(Category).filter(Category.id == form.category.data).first():
-            return render_template('dishes.html', title='Добавление новости',
+            return render_template('dishes.html', title='Добавление блюда',
                                    form=form,
                                    message="Категории с таким ID не существует")
         dish.title = form.title.data
         dish.cooker = form.cooker.data
         dish.work_size = form.work_size.data
         dish.category = form.category.data
+        dish.recipe = form.recipe.data
         db_sess.add(dish)
         db_sess.commit()
         return redirect('/')
-    return render_template('dishes.html', title='Добавление новости',
+    return render_template('dishes.html', title='Добавление блюда',
                            form=form)
 
 
@@ -119,13 +120,14 @@ def edit_dishes(id):
             form.work_size.data = dish.work_size
             form.ingredients.data = dish.ingredients
             form.category.data = dish.category
+            form.recipe.data = dish.recipe
         else:
             abort(404)
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
         if not db_sess.query(Category).filter(Category.id == form.category.data).first():
-            return render_template('dishes.html', title='Добавление новости',
+            return render_template('dishes.html', title='Изменение блюда',
                                    form=form,
                                    message="Категории с таким ID не существует")
         if dish:
@@ -134,12 +136,13 @@ def edit_dishes(id):
             dish.work_size = form.work_size.data
             dish.ingredients = form.ingredients.data
             dish.category = form.category.data
+            dish.recipe = form.recipe.data
             db_sess.commit()
             return redirect('/')
         else:
             abort(404)
     return render_template('dishes.html',
-                           title='Добавление работы',
+                           title='Изменение блюда',
                            form=form)
 
 
@@ -183,27 +186,31 @@ def like_it(id):
 @login_required
 def profile(id):
     liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
-    print(liked_dishes)
-    return render_template('profile.html', user=current_user,
-                           dishes=' '.join([elem.title for elem in db_sess.query(Dish).filter(Dish.id.in_(liked_dishes)).all()]))
+    return render_template('profile.html', user=current_user, photo=url_for('static', filename=f'img_user/{id}.jpg'),
+                           dishes=' '.join([elem.title for elem in
+                                            db_sess.query(Dish).filter(Dish.id.in_(liked_dishes)).all()]))
 
 
-@app.route('/file_upload/<int:id>', methods=['POST', 'GET'])
-def sample_file_upload(id):
+@app.route('/file_upload/<kind>/<int:id>', methods=['POST', 'GET'])
+def sample_file_upload(kind, id):
     if request.method == 'GET':
         return render_template('file_upload.html', id=id)
     elif request.method == 'POST':
         f = request.files[str(id)]
-        with open(f'static/img/{id}.jpg', 'wb') as s:
-            s.write(f.read())
-        return f'<a href="/" align="center">Форма отправлена. Вернуться на главную</a>'
+        if kind == 'dish':
+            with open(f'static/img/{id}.jpg', 'wb') as s:
+                s.write(f.read())
+        else:
+            with open(f'static/img_user/{id}.jpg', 'wb') as s:
+                s.write(f.read())
+        return f'<a href="/" align="center">Фото загружено. Вернуться на главную</a>'
 
 
 @app.route('/')
 def main():
     dishes = [elem for elem in db_sess.query(Dish).all()]
     if current_user.is_authenticated:
-        liked_dishes = str(current_user.liked_dish).split(',')
+        liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
     else:
         liked_dishes = []
     return render_template('table.html', orders_list=sorted(dishes, key=lambda x: x.likes, reverse=True), liked_dishes=liked_dishes)
