@@ -162,15 +162,11 @@ def dish_delete(id):
 
 
 @app.route('/like_it/<int:id>', methods=['GET', 'POST'])
-@login_required
 def like_it(id):
     db_sess = db_session.create_session()
     dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
-    if current_user.is_authenticated:
-        liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
-    else:
-        liked_dishes = []
+    liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
     if dish.id in liked_dishes:
         dish.likes -= 1
         del liked_dishes[liked_dishes.index(dish.id)]
@@ -213,7 +209,8 @@ def main():
         liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
     else:
         liked_dishes = []
-    return render_template('table.html', orders_list=sorted(dishes, key=lambda x: x.likes, reverse=True), liked_dishes=liked_dishes)
+    return render_template('table.html', orders_list=sorted(dishes, key=lambda x: x.likes, reverse=True),
+                           liked_dishes=liked_dishes, message='')
 
 
 if __name__ == '__main__':
