@@ -13,9 +13,8 @@ print(post('http://localhost:5000/api/v2/users',
                  'name': 'Susanin',
                  'age': 25,
                  'position': 'captain_2',
-                 'speciality': 'research engineer',
-                 'address': 'Moon',
-                 'email': '12@mars.org'}).json())
+                 'email': '12@mars.org',
+                 'password': 1234}).json())
 
 print(delete('http://localhost:5000/api/v2/users/999').json())
 print(delete('http://localhost:5000/api/v2/users/1').json())

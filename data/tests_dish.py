@@ -14,5 +14,5 @@ print(post('http://localhost:5000/api/v2/jobs',
                  'work_size': 1,
                  'category': 2}).json())
 print()
-print(delete('http://localhost:5000/api/v2/jobs/999').json())
-print(delete('http://localhost:5000/api/v2/jobs/1').json())
+# print(delete('http://localhost:5000/api/v2/jobs/999').json())
+# print(delete('http://localhost:5000/api/v2/jobs/1').json())
