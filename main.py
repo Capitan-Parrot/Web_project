@@ -220,5 +220,4 @@ if __name__ == '__main__':
     api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>')
     api.add_resource(dishes_resource.DishesListResource, '/api/v2/dishes')
     api.add_resource(dishes_resource.DishesResource, '/api/v2/dishes/<int:dishes_id>')
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
