@@ -1,4 +1,3 @@
-import datetime
 from sqlalchemy import orm
 import sqlalchemy
 from .db_session import SqlAlchemyBase
