@@ -1,3 +1,6 @@
+werkzeug
+requests
+sqlalchemy
 
 flask
 flask_login
