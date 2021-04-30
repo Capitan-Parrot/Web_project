@@ -164,7 +164,7 @@ def dish_delete(id):
 @app.route('/like_it/<int:id>', methods=['GET', 'POST'])
 def like_it(id):
     db_sess = db_session.create_session()
-    dish = db_sess.query(Dish).filter(Dish.id == id, ((Dish.user == current_user) | (current_user.id == 1))).first()
+    dish = db_sess.query(Dish).filter(Dish.id == id).first()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
     liked_dishes = list(map(lambda x: int(x) if 'None' not in x else 0, str(current_user.liked_dish).split(',')))
     if dish.id in liked_dishes:
