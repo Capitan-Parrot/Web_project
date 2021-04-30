@@ -1,4 +1,4 @@
-os
+
 flask
 flask_login
 flask_restful
